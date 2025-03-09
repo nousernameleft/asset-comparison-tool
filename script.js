@@ -42,10 +42,15 @@ function searchAsset() {
 }
 
 function displayData(data) {
-    document.getElementById("result").innerHTML = `
-        <h3>${data["01. symbol"]}</h3>
-        <p>Price: $${data["05. price"]}</p>
-        <p>Volume: ${data["06. volume"]}</p>
-        <p>Change: ${data["09. change"]} (${data["10. change percent"]})</p>
+    const table = document.getElementById("comparisonTable");
+
+    const row = document.createElement("tr");
+    row.innerHTML = `
+        <td>${data["01. symbol"]}</td>
+        <td>$${data["05. price"]}</td>
+        <td>${data["06. volume"]}</td>
+        <td>${data["09. change"]} (${data["10. change percent"]})</td>
     `;
+
+    table.appendChild(row);
 }
