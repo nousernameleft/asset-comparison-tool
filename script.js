@@ -51,14 +51,15 @@ async function fetchChartData(symbol) {
     }
 }
 
-// ✅ Update or create the chart
+// ✅ Update or create the chart with multiple stocks
 function updateChart(dates, prices, symbol) {
     const ctx = document.getElementById("priceChart").getContext("2d");
 
-    // Generate a random color for each stock
+    // Generate a unique color for each stock
     const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
 
     if (!chart) {
+        // Create new chart if it doesn't exist
         chart = new Chart(ctx, {
             type: "line",
             data: {
@@ -76,42 +77,54 @@ function updateChart(dates, prices, symbol) {
         });
     }
 
-    chart.data.datasets.push({
-        label: symbol,
-        data: prices,
-        borderColor: randomColor,
-        borderWidth: 2,
-        fill: false,
-    });
+    // ✅ Check if stock is already on the chart, avoid duplicates
+    const existingDataset = chart.data.datasets.find(dataset => dataset.label === symbol);
+    if (!existingDataset) {
+        chart.data.datasets.push({
+            label: symbol,
+            data: prices,
+            borderColor: randomColor,
+            borderWidth: 2,
+            fill: false,
+        });
+    } else {
+        console.warn(`Stock ${symbol} is already displayed.`);
+    }
 
     chart.update();
 }
 
 // ✅ Search assets when clicking "Search" or pressing "Enter"
 function searchAssets() {
-    const symbols = document.getElementById("searchInput").value.split(",").map(s => s.trim().toUpperCase());
+    const input = document.getElementById("searchInput");
+    const symbols = input.value.split(",").map(s => s.trim().toUpperCase());
+    
+    if (symbols.length === 0 || symbols[0] === "") {
+        console.warn("No stock symbol entered.");
+        return;
+    }
+
     symbols.forEach(symbol => fetchStockData(symbol));
+    input.value = ""; // ✅ Clear input after search
 }
 
 // ✅ Reset function to clear everything
 function resetData() {
     document.getElementById("comparisonTable").innerHTML = ""; // Clear table
-    document.getElementById("stockInfo").innerHTML = ""; // Clear stock info
     if (chart) {
         chart.destroy(); // Destroy existing chart
         chart = null; // Reset chart instance
     }
 }
 
-// ✅ Add "Enter" key event listener for searching
-document.getElementById("searchInput").addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-        event.preventDefault();
-        searchAssets();
-    }
-});
-
-// ✅ Initialize when the page loads
+// ✅ Enable "Enter" key for searching stocks
 document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("searchInput").addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            searchAssets();
+        }
+    });
+
     console.log("Page is loaded!");
 });
