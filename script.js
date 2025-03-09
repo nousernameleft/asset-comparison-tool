@@ -1,3 +1,5 @@
+console.log("script.js is loaded!");
+
 async function fetchStockData(symbol) {
     const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=COGO909UH464RKKY`;
 
