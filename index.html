@@ -10,29 +10,26 @@
     <h1>Compare Stocks, ETFs, and Cryptos</h1>
     <p>Select assets to compare their financial data.</p>
 
-    <input type="text" id="searchInput" placeholder="Enter stock symbol (e.g., AAPL, TSLA, BTC)">
+    <input type="text" id="searchInput" placeholder="Enter stock symbols (e.g., AAPL, TSLA, BTC), separated by commas">
     <button onclick="searchAssets()">Search</button>
 
-    <!-- Display stock information here -->
     <div id="stockInfo"></div> <!-- This is where stock data will appear -->
 
     <table border="1">
-    <thead>
-        <tr>
-            <th>Symbol</th>
-            <th>Price</th>
-            <th>Volume</th>
-            <th>Change</th>
-        </tr>
-    </thead>
-    <tbody id="comparisonTable">
-    </tbody>
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Volume</th>
+                <th>Change</th>
+            </tr>
+        </thead>
+        <tbody id="comparisonTable"></tbody>
     </table>
 
     <canvas id="priceChart"></canvas>
     <div id="result"></div>
 
-    <!-- Script loaded at the end to ensure the DOM is fully loaded before execution -->
     <script src="script.js"></script>
 </body>
 </html>
