@@ -1,6 +1,6 @@
 console.log("script.js is loaded!");
 
-// Move the function definition outside the DOMContentLoaded listener
+// Define the function globally
 async function fetchStockData(symbol) {
     try {
         const response = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`);
@@ -41,13 +41,14 @@ function displayChart(data, symbol) {
     });
 }
 
+// Define searchAssets function globally
 function searchAssets() {
     const symbols = document.getElementById("searchInput").value.split(",").map(symbol => symbol.trim().toUpperCase());
     // Fetch data for all symbols in parallel
     symbols.forEach(symbol => fetchStockData(symbol));
 }
 
-// Wrap everything else inside DOMContentLoaded to ensure it runs after the DOM is loaded
+// Wait for the DOM content to be fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-    // Any additional initialization code can go here
+    // Any DOM-specific initialization goes here if needed
 });
