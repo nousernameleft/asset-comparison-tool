@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Asset Comparison Tool</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="styles.css"> <!-- ✅ Added CSS file here -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <h1>Compare Stocks, ETFs, and Cryptos</h1>
         <p>Select assets to compare their financial data.</p>
 
-        <input type="text" id="searchInput" placeholder="Enter stock symbols (e.g., AAPL, TSLA, BTC)">
+        <input type="text" id="searchInput" placeholder="Enter stock symbols (e.g., AAPL, TSLA)" />
         <button onclick="searchAssets()">Search</button>
-        <button onclick="resetData()" class="reset-btn">Reset</button>
+        <button class="reset-btn" onclick="resetData()">Reset</button>
 
         <div id="stockInfo"></div>
 
@@ -24,11 +24,13 @@
                     <th>Symbol</th>
                     <th>Price</th>
                     <th>Volume</th>
+                    <th>Change</th>
                 </tr>
             </thead>
             <tbody id="comparisonTable"></tbody>
         </table>
 
+        <!-- Graph Container -->
         <div class="chart-container">
             <canvas id="priceChart"></canvas>
         </div>
