@@ -1,21 +1,21 @@
 console.log("script.js is loaded!");
 
-// Define the function globally
+const API_KEY = "COGO909UH464RKKY"; // Replace with your own Alpha Vantage API key
+
 async function fetchStockData(symbol) {
     try {
-        const response = await fetch(`https://corsproxy.io/?https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`);
+        const response = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=${API_KEY}`);
         const data = await response.json();
 
-        if (!data.quoteResponse || !data.quoteResponse.result || data.quoteResponse.result.length === 0) {
+        if (!data["Global Quote"] || Object.keys(data["Global Quote"]).length === 0) {
             console.error(`No data found for ${symbol}`);
             return;
         }
 
-        const stock = data.quoteResponse.result[0];
         const stockInfo = document.getElementById("stockInfo");
-
         if (stockInfo) {
-            stockInfo.innerHTML += `<p><strong>${symbol}</strong>: $${stock.regularMarketPrice} | Volume: ${stock.regularMarketVolume} | Change: ${stock.regularMarketChangePercent.toFixed(2)}%</p>`;
+            const stock = data["Global Quote"];
+            stockInfo.innerHTML += `<p><strong>${symbol}</strong>: $${stock["05. price"]} | Volume: ${stock["06. volume"]} | Change: ${stock["09. change"]} (${stock["10. change percent"]})</p>`;
         } else {
             console.error("stockInfo element is missing in index.html!");
         }
@@ -24,32 +24,7 @@ async function fetchStockData(symbol) {
     }
 }
 
-function displayChart(data, symbol) {
-    const dates = Object.keys(data).slice(0, 30).reverse(); 
-    const prices = dates.map(date => parseFloat(data[date]["4. close"]));
-
-    const ctx = document.getElementById("priceChart").getContext("2d");
-
-    new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: dates,
-            datasets: [{
-                label: `${symbol} Price`,
-                data: prices,
-                borderColor: "blue",
-                borderWidth: 2,
-                fill: false
-            }]
-        }
-    });
-}
-
-// Define searchAssets function globally
 function searchAssets() {
     const symbols = document.getElementById("searchInput").value.split(",").map(symbol => symbol.trim().toUpperCase());
-    // Fetch data for all symbols in parallel
     symbols.forEach(symbol => fetchStockData(symbol));
 }
-
-// No need for DOMContentLoaded event listener, as we're now loading the script last
