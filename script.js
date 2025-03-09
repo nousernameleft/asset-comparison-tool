@@ -48,7 +48,4 @@ function searchAssets() {
     symbols.forEach(symbol => fetchStockData(symbol));
 }
 
-// Wait for the DOM content to be fully loaded
-document.addEventListener("DOMContentLoaded", function () {
-    // Any DOM-specific initialization goes here if needed
-});
+// No need for DOMContentLoaded event listener, as we're now loading the script last
