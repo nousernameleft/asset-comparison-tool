@@ -1,19 +1,22 @@
 console.log("script.js is loaded!");
 
-function fetchStockData(symbol) {
-    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=COGO909UH464RKKY`)
-        .then(response => response.json())
-        .then(data => {
-            const stockInfo = document.getElementById("stockInfo");
-            
-            // ✅ Check if element exists before updating
-            if (stockInfo) {
-                stockInfo.innerHTML = `<p>${symbol}: ${data["Global Quote"]["05. price"]}</p>`;
-            } else {
-                console.error("stockInfo element is missing in index.html!");
-            }
-        })
-        .catch(error => console.error("Error fetching stock data:", error));
+async function fetchStockData(symbol) {
+    try {
+        const response = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${symbol}`);
+        const data = await response.json();
+        
+        const stockInfo = document.getElementById("stockInfo");
+        
+        // ✅ Check if element exists before updating
+        if (stockInfo) {
+            const stock = data.quoteResponse.result[0]; // Get the first stock's data
+            stockInfo.innerHTML += `<p>${symbol}: $${stock.regularMarketPrice}</p>`;
+        } else {
+            console.error("stockInfo element is missing in index.html!");
+        }
+    } catch (error) {
+        console.error("Error fetching stock data:", error);
+    }
 }
 
 function displayChart(data, symbol) {
@@ -37,9 +40,10 @@ function displayChart(data, symbol) {
     });
 }
 
-function searchAsset() {
-    const symbol = document.getElementById("searchInput").value.toUpperCase();
-    fetchStockData(symbol);
+function searchAssets() {
+    const symbols = document.getElementById("searchInput").value.split(",").map(symbol => symbol.trim().toUpperCase());
+    // Fetch data for all symbols in parallel
+    symbols.forEach(symbol => fetchStockData(symbol));
 }
 
 function displayData(data) {
@@ -47,10 +51,10 @@ function displayData(data) {
 
     const row = document.createElement("tr");
     row.innerHTML = `
-        <td>${data["01. symbol"]}</td>
-        <td>$${data["05. price"]}</td>
-        <td>${data["06. volume"]}</td>
-        <td>${data["09. change"]} (${data["10. change percent"]})</td>
+        <td>${data.symbol}</td>
+        <td>$${data.price}</td>
+        <td>${data.volume}</td>
+        <td>${data.change} (${data.changePercent})</td>
     `;
 
     table.appendChild(row);
