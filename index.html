@@ -13,7 +13,19 @@
     <input type="text" id="searchInput" placeholder="Enter stock symbol (e.g., AAPL, TSLA, BTC)">
     <button onclick="searchAsset()">Search</button>
 
-    <div id="result"></div>
+    <table border="1">
+    <thead>
+        <tr>
+            <th>Symbol</th>
+            <th>Price</th>
+            <th>Volume</th>
+            <th>Change</th>
+        </tr>
+    </thead>
+    <tbody id="comparisonTable">
+    </tbody>
+</table>
+
     <canvas id="priceChart"></canvas>
 
     <script src="script.js"></script>
