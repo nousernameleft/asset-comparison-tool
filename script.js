@@ -1,20 +1,19 @@
 console.log("script.js is loaded!");
 
-async function fetchStockData(symbol) {
-    const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=COGO909UH464RKKY`;
-
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (data["Time Series (Daily)"]) {
-            displayChart(data["Time Series (Daily)"], symbol);
-        } else {
-            document.getElementById("result").innerHTML = "<p>Invalid symbol or data not available.</p>";
-        }
-    } catch (error) {
-        document.getElementById("result").innerHTML = "<p>Error fetching data.</p>";
-    }
+function fetchStockData(symbol) {
+    fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbol}&apikey=COGO909UH464RKKY`)
+        .then(response => response.json())
+        .then(data => {
+            const stockInfo = document.getElementById("stockInfo");
+            
+            // ✅ Check if element exists before updating
+            if (stockInfo) {
+                stockInfo.innerHTML = `<p>${symbol}: ${data["Global Quote"]["05. price"]}</p>`;
+            } else {
+                console.error("stockInfo element is missing in index.html!");
+            }
+        })
+        .catch(error => console.error("Error fetching stock data:", error));
 }
 
 function displayChart(data, symbol) {
